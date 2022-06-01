@@ -1,0 +1,31 @@
+#pragma warning(disable : 4996)
+#include <Windows.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <conio.h>
+using namespace std;
+CRITICAL_SECTION cs;
+struct employee
+{
+	int num = -1;
+	char name[10] = ""; 
+	double hours = 0; 
+};
+employee* arr;
+bool* mod;
+int numOfEntries;
+int main() {
+	char fileName[66];
+	cout << "Input name of the file:" << endl;
+	cin >> fileName;
+	cout << "Input the number of entries: " << endl;
+	cin >> numOfEntries;
+	cout << "Input ID, name and number of hours worked:" << endl;
+	arr = new employee[numOfEntries];
+	for (int i = 0; i < numOfEntries; i++) {
+		cout << "Input the information of " << i + 1 << " worker:" << endl;
+		cin >> arr[i].num >> arr[i].name >> arr[i].hours;
+	}
+  return 0;
+}
