@@ -57,6 +57,25 @@ int main() {
 			CloseHandle(pi.hThread);
 		}
 	}
+	SetEvent(hStartALL);
+	HANDLE hPipe;
+	HANDLE* hThreads = new HANDLE[numOfProcesses];
+	for (int i = 0; i < numOfProcesses; i++) {
+		hPipe = CreateNamedPipe(LPCWSTR("\\\\.\\pipe\\nPipe"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, PIPE_UNLIMITED_INSTANCES, 0, 0, INFINITE, NULL);
+		if (INVALID_HANDLE_VALUE == hPipe) {
+			cout << "Creating named pipe ended with error." << endl;
+			break;
+		}
+		hThreads[i] = CreateThread(NULL, 0, mes, (LPVOID)hPipe, 0, NULL);
+	}
+	WaitForMultipleObjects(numOfProcesses, hThreads, TRUE, INFINITE);
+	cout << "File after changings:" << endl;
+	for (int i = 0; i < numOfEntries; i++) {
+		cout << arr[i].num << " " << arr[i].name << " " << arr[i].hours << endl;
+	}
+	cout << "Press any key to end: " << endl;
+	getch();
+	DeleteCriticalSection(&cs);
 	delete[] hThreads;
 	delete[] hEvents;
 	delete[] mod;
